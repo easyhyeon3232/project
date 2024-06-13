@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>캡스톤 1조</title>
+    <style>
+    .logo {
+        width: 60%;
+        float: left; /* 왼쪽으로 이동 */
+    }
+
+    .prediction {
+        width: 40%;
+        float: left; /* 왼쪽으로 이동 */
+        box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
+        padding: 20px; /* 여백 추가 */
+    }
+
+    .prediction .prediction-text {
+        font-weight: bold; /* 볼드체 */
+        color: red; /* 빨간색 */
+    }
+
+    .prediction .prediction-text span {
+        color: black; /* 블랙 */
+    }
+</style>
+
+</head>
+<body>
+{% include 'head.html' %}
+{% include 'topmenu.html' %}
+
+<br/>
+<br/>
+<br/>
+<br/>
+    <a>
+        <img src="assets/images/camera.png" class="logo" alt="">
+    </a>
+<br/>
+<br/>
+<br/>
+<br/>
+    <div class="prediction">
+        <!-- 여기에 음주 운전 예측 결과를 표시하는 내용을 넣으세요 -->
+        <h2>음주 운전 예측 결과</h2>
+        <p><span class="prediction-text">음주 상태</span>인 걸로 예측됩니다.</p>
+    </div>
+
+    <div class="top_btn fix_btn"><i class="fas fa-arrow-up"></i></div>
+<div class="chatbot_btn fix_btn"><i class="fas fa-robot"></i></div>
+<!--<div class="chatbot_close_btn fix_btn" onclick="close_chatbot()"><i class="fas fa-times"></i></div>-->
+</body>
+</html>

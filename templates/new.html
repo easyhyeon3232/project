@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html' %}
+    {% include 'topmenu.html' %}
+    <title>ALCOTECT</title>
+    <link rel="stylesheet" href="assets/css/new.css?after">
+    <br>
+    <br>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form method="post" name="join" id="join">
+                    <h2>회원가입</h2>
+                    <br>
+                    <!-- 이름 -->
+                    <div class="inputbox">
+                        <ion-icon name="houman-outline"></ion-icon>
+                        <input type="text" name="name" id="name" required>
+                        <label for="name">Name</label>
+                        <span id="nameError"></span>
+                    </div>
+                    <!-- 이메일 -->
+                    <div class="inputbox">
+                        <input type="email" name="email" id="email" required>
+                        <label for="email">Email</label>
+                        <span id="emailError"></span>
+                    </div>
+                    <!-- 비밀번호 -->
+                    <div class="inputbox">
+                        <input type="password" name="password" id="password" required>
+                        <label for="password">Password</label>
+                        <span id="pwError"></span>
+                    </div>
+                    <!-- 비밀번호 확인 -->
+                    <div class="inputbox">
+                        <input type="password" name="passwordConfirm" id="passwordConfirm" required>
+                        <label for="passwordConfirm">Password Check</label>
+                        <span id="pwCheckError"></span>
+                    </div>
+                    <br>
+                    <div class="forget">
+                        <label for="agree"><input type="checkbox" id="agree">개인정보 동의  <a href="#"></a></label>
+                    </div>
+                    <div class="btn_area" style="color:black">
+                        <button type="submit">회원가입</button>
+                        <div class="register"></div>
+                        <div class="kakao">
+                            <a href="https://kauth.kakao.com/oauth/authorize?client_id=2380372b7263a4efd61bed7142996f5f&redirect_uri=http%3A%2F%2F127.0.0.1%3A8001%2F&response_type=code&auth_tran_id=C-bNLLI3r2O8yexTxx0YuKqCQ~N3iJAyP2HjkR5Ki0aH3qVnCmfhKGckzLJl&ka=sdk%2F2.7.2%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko%20device%2FWin32%20origin%2Fhttp%253A%252F%252F127.0.0.1%253A8001&is_popup=false" target="_self"><img src="assets/images/kakao.png" alt=""></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="assets/js/validation.js"></script>
+    <script>
+        document.getElementById("join").addEventListener("submit", function(event) {
+            // 비밀번호 유효성 검사
+            var password = document.getElementById("password").value;
+            var passwordConfirm = document.getElementById("passwordConfirm").value;
+            if (password !== passwordConfirm) {
+                document.getElementById("pwCheckError").textContent = "비밀번호가 일치하지 않습니다.";
+                event.preventDefault();
+                return;
+            }
+
+            // 이메일 유효성 검사
+            var email = document.getElementById("email").value;
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").textContent = "유효한 이메일 주소를 입력하세요.";
+                event.preventDefault();
+                return;
+            }
+
+            // 여기에 회원가입 처리 로직을 추가할 수 있습니다.
+            // 이 부분에서 홈페이지로 이동하게끔 코드를 수정하겠습니다.
+            window.location.href = "/home.do"; // 홈페이지로 이동
+            event.preventDefault(); // 폼 제출 방지
+        });
+    </script>
+</body>
+</html>

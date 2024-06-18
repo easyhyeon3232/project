@@ -7,10 +7,10 @@ from passlib.context import CryptContext
 
 # MySQL 데이터베이스 연결 정보 설정
 DB_USER = "root"
-DB_PASSWORD = "1234"
-DB_HOST = "127.0.0.1"
-DB_PORT = "3306"
-DB_NAME = "newuser"
+DB_PASSWORD = "test"
+DB_HOST = "10.11.52.113"
+DB_PORT = "3307"
+DB_NAME = "db"
 
 # SQLAlchemy 연결 URL 생성
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"

@@ -20,7 +20,7 @@
                 <form action="/login" method="post" id="loginForm">
                     <h2>Login</h2>
                     <div class="inputbox">
-                        <input type="email" name="username" id="email" >
+                        <input type="email" name="email" id="email" >
                         <label for="email">Email</label>
                         <span class="error-message" id="emailError"></span>
                     </div>
@@ -68,6 +68,8 @@
                     console.log(data); // 서버 응답 확인
                     if (data.access_token) {
                         alert("로그인 성공");
+                        // 세션 ID 저장
+                        sessionStorage.setItem("sessionId", data.sessionId);
                         // 로그인 성공 후 처리 (예: 페이지 리다이렉트)
                         window.location.href = "/home.do";
                     } else {

@@ -50,9 +50,9 @@ def create_access_token(data: dict):
 
 # 로그인 처리
 @router.post("/login")
-def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(request: Request, form_data: User, db: Session = Depends(get_db)):
     try:
-        user = get_user(form_data.username, db)
+        user = db.query(UserModel).filter(UserModel.email == form_data.email).first()
         if not user or not verify_password(form_data.password, user.password_hash):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 

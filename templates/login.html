@@ -1,4 +1,4 @@
-<!--login.html-->
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,16 +17,16 @@
     <section>
         <div class="form-box">
             <div class="form-value">
-                <form action="/login" method="post" id="loginForm">
+                <form id="loginForm">
                     <h2>Login</h2>
                     <div class="inputbox">
-                        <input type="email" name="email" id="email" >
+                        <input type="email" id="email" >
                         <label for="email">Email</label>
                         <span class="error-message" id="emailError"></span>
                     </div>
                     <div class="inputbox">
                         <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input type="password" name="password" id="password">
+                        <input type="password" id="password">
                         <label for="password">Password</label>
                     </div>
                     <div class="forget">
@@ -51,7 +51,7 @@
                 event.preventDefault();
 
                 var formData = new FormData();
-                formData.append("username", document.getElementById("email").value);
+                formData.append("email", document.getElementById("email").value);
                 formData.append("password", document.getElementById("password").value);
 
                 fetch("/login", {
@@ -68,8 +68,8 @@
                     console.log(data); // 서버 응답 확인
                     if (data.access_token) {
                         alert("로그인 성공");
-                        // 세션 ID 저장
-                        sessionStorage.setItem("sessionId", data.sessionId);
+                        // 토큰 저장
+                        localStorage.setItem("accessToken", data.access_token);
                         // 로그인 성공 후 처리 (예: 페이지 리다이렉트)
                         window.location.href = "/home.do";
                     } else {

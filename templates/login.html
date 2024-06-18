@@ -1,38 +1,43 @@
+<!--login.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     {% include 'head.html' %}
     {% include 'topmenu.html' %}
-  <title>ALCOTECT</title>
+    <title>ALCOTECT</title>
     <link rel="stylesheet" href="assets/css/index.css?after">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
 <body>
     <section>
         <div class="form-box">
             <div class="form-value">
-                <form action="">
+                <form action="/login" method="post" id="loginForm">
                     <h2>Login</h2>
                     <div class="inputbox">
-                        <ion-icon name="mail-outline"></ion-icon>
-                        <input type="email" required>
-                        <label for="">Email</label>
+                        <input type="email" name="username" id="email" required>
+                        <label for="email">Email</label>
+                        <span class="error-message" id="emailError"></span>
                     </div>
                     <div class="inputbox">
                         <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input type="password" required>
-                        <label for="">Password</label>
+                        <input type="password" name="password" id="password" required>
+                        <label for="password">Password</label>
                     </div>
                     <div class="forget">
-                        <label for=""><input type="checkbox">이메일 저장하기  <a href="#"></a></label>
-
+                        <label for="remember"><input type="checkbox" id="remember">이메일 저장하기  <a href="#"></a></label>
                     </div>
-                    <button style="color:black" href="/home.do">로그인</button>
+                    <button type="submit">로그인</button>
                     <div class="register">
                         <p>메일이 없습니다. <a href="/new.do">회원가입</a></p>
                     </div>
                     <div class="kakao">
-                        <image_button type="image"><a href="https://kauth.kakao.com/oauth/authorize?client_id=2380372b7263a4efd61bed7142996f5f&redirect_uri=http%3A%2F%2F127.0.0.1%3A8001%2F&response_type=code&auth_tran_id=C-bNLLI3r2O8yexTxx0YuKqCQ~N3iJAyP2HjkR5Ki0aH3qVnCmfhKGckzLJl&ka=sdk%2F2.7.2%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko%20device%2FWin32%20origin%2Fhttp%253A%252F%252F127.0.0.1%253A8001&is_popup=false"target="_self"><img src="assets/images/kakao.png" alt=""> </a></image>
-
+                        <image_button type="image"><a href="https://kauth.kakao.com/oauth/authorize?client_id=2380372b7263a4efd61bed7142996f5f&redirect_uri=http%3A%2F%2F127.0.0.1%3A8001%2F&response_type=code&auth_tran_id=C-bNLLI3r2O8yexTxx0YuKqCQ~N3iJAyP2HjkR5Ki0aH3qVnCmfhKGckzLJl&ka=sdk%2F2.7.2%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko%20device%2FWin32%20origin%2Fhttp%253A%252F%252F127.0.0.1%253A8001&is_popup=false" target="_self"><img src="assets/images/kakao.png" alt=""> </a></image>
                     </div>
                 </form>
             </div>
@@ -40,5 +45,41 @@
     </section>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("loginForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                var formData = new FormData();
+                formData.append("username", document.getElementById("email").value);
+                formData.append("password", document.getElementById("password").value);
+
+                fetch("/login", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // 서버 응답 확인
+                    if (data.access_token) {
+                        alert("로그인 성공");
+                        // 로그인 성공 후 처리 (예: 페이지 리다이렉트)
+                        window.location.href = "/home.do";
+                    } else {
+                        throw new Error("로그인 중 오류가 발생했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("로그인 중 오류가 발생했습니다.");
+                });
+            });
+        });
+    </script>
 </body>
 </html>

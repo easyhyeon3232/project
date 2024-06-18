@@ -1,3 +1,4 @@
+<!--new.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,12 @@
     {% include 'topmenu.html' %}
     <title>ALCOTECT</title>
     <link rel="stylesheet" href="assets/css/new.css?after">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+        }
+    </style>
     <br>
     <br>
 </head>
@@ -12,7 +19,7 @@
     <section>
         <div class="form-box">
             <div class="form-value">
-                <form method="post" name="join" id="join">
+                <form method="post" action="/signup" name="joinForm" id="joinForm">
                     <h2>회원가입</h2>
                     <br>
                     <!-- 이름 -->
@@ -20,32 +27,38 @@
                         <ion-icon name="houman-outline"></ion-icon>
                         <input type="text" name="name" id="name" required>
                         <label for="name">Name</label>
-                        <span id="nameError"></span>
+                        <span class="error-message" id="nameError"></span>
                     </div>
                     <!-- 이메일 -->
                     <div class="inputbox">
                         <input type="email" name="email" id="email" required>
                         <label for="email">Email</label>
-                        <span id="emailError"></span>
+                        <span class="error-message" id="emailError"></span>
                     </div>
                     <!-- 비밀번호 -->
                     <div class="inputbox">
                         <input type="password" name="password" id="password" required>
                         <label for="password">Password</label>
-                        <span id="pwError"></span>
+                        <span class="error-message" id="pwError"></span>
                     </div>
                     <!-- 비밀번호 확인 -->
                     <div class="inputbox">
                         <input type="password" name="passwordConfirm" id="passwordConfirm" required>
                         <label for="passwordConfirm">Password Check</label>
-                        <span id="pwCheckError"></span>
+                        <span class="error-message" id="pwCheckError"></span>
                     </div>
-                    <br>
+                    <!-- 생년월일 -->
+                    <div class="inputbox">
+                        <input type="date" name="birthdate" id="birthdate">
+                        <label for="birthdate">Birthdate</label>
+                        <span class="error-message" id="birthdateError"></span>
+                    </div>
+                    <!-- 이용 약관 및 개인정보 동의 -->
                     <div class="forget">
-                        <label for="agree"><input type="checkbox" id="agree">개인정보 동의  <a href="#"></a></label>
+                        <label for="agree"><input type="checkbox" id="agree" required>이용 약관 및 개인정보 처리방침에 동의합니다</label>
                     </div>
                     <div class="btn_area" style="color:black">
-                        <button type="submit">회원가입</button>
+                        <button type="submit" id="submitBtn">회원가입</button>
                         <div class="register"></div>
                         <div class="kakao">
                             <a href="https://kauth.kakao.com/oauth/authorize?client_id=2380372b7263a4efd61bed7142996f5f&redirect_uri=http%3A%2F%2F127.0.0.1%3A8001%2F&response_type=code&auth_tran_id=C-bNLLI3r2O8yexTxx0YuKqCQ~N3iJAyP2HjkR5Ki0aH3qVnCmfhKGckzLJl&ka=sdk%2F2.7.2%20os%2Fjavascript%20sdk_type%2Fjavascript%20lang%2Fko%20device%2FWin32%20origin%2Fhttp%253A%252F%252F127.0.0.1%253A8001&is_popup=false" target="_self"><img src="assets/images/kakao.png" alt=""></a>
@@ -57,31 +70,64 @@
     </section>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="assets/js/validation.js"></script>
     <script>
-        document.getElementById("join").addEventListener("submit", function(event) {
-            // 비밀번호 유효성 검사
-            var password = document.getElementById("password").value;
-            var passwordConfirm = document.getElementById("passwordConfirm").value;
-            if (password !== passwordConfirm) {
-                document.getElementById("pwCheckError").textContent = "비밀번호가 일치하지 않습니다.";
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("joinForm").addEventListener("submit", function(event) {
                 event.preventDefault();
-                return;
-            }
 
-            // 이메일 유효성 검사
-            var email = document.getElementById("email").value;
-            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-            if (!emailPattern.test(email)) {
-                document.getElementById("emailError").textContent = "유효한 이메일 주소를 입력하세요.";
-                event.preventDefault();
-                return;
-            }
+                var password = document.getElementById("password").value;
+                var confirmPassword = document.getElementById("passwordConfirm").value;
+                if (password != confirmPassword) {
+                    document.getElementById("pwCheckError").innerHTML = "비밀번호가 일치하지 않습니다.";
+                    return; // 일치하지 않을 경우 폼 제출을 막음
+                }
 
-            // 여기에 회원가입 처리 로직을 추가할 수 있습니다.
-            // 이 부분에서 홈페이지로 이동하게끔 코드를 수정하겠습니다.
-            window.location.href = "/home.do"; // 홈페이지로 이동
-            event.preventDefault(); // 폼 제출 방지
+                var email = document.getElementById("email").value;
+                var emailError = document.getElementById("emailError");
+                if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+                    emailError.innerHTML = "유효하지 않은 이메일 형식입니다.";
+                    return; // 유효하지 않은 이메일 형식일 경우 폼 제출을 막음
+                } else {
+                    emailError.innerHTML = ""; // 유효한 경우 에러 메시지 초기화
+                }
+
+                var birthdate = new Date(document.getElementById("birthdate").value).toISOString();
+
+                var data = {
+                    name: document.getElementById("name").value,
+                    email: email,
+                    password: password,
+                    passwordConfirm: confirmPassword,
+                    birthdate: birthdate
+                };
+
+                fetch("/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // 서버 응답 확인
+                    if (data.message === "회원가입이 완료되었습니다.") {
+                        alert("회원가입이 완료되었습니다.");
+                        window.location.href = "/home.do"; // 홈페이지로 리다이렉트
+                    } else {
+                        throw new Error("회원가입 중 오류가 발생했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("회원가입 중 오류가 발생했습니다.");
+                });
+            });
         });
     </script>
 </body>

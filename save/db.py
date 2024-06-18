@@ -1,5 +1,5 @@
 #db.py
-from sqlalchemy import create_engine, Column, String, DateTime
+from sqlalchemy import create_engine, Integer, Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -30,10 +30,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class User(Base):
     __tablename__ = "users"
 
-    name = Column(String(50), index=True)
-    email = Column(String(100), unique=True, primary_key=True, index=True)
-    password_hash = Column(String(100))
-    birthdate = Column(DateTime)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
 
 # 데이터베이스 테이블 생성
 Base.metadata.create_all(bind=engine)

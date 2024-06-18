@@ -9,7 +9,6 @@ import re
 
 router = APIRouter()
 
-# 회원가입을 위한 모델 정의
 class Signup(BaseModel):
     name: str
     email: str
@@ -17,7 +16,6 @@ class Signup(BaseModel):
     passwordConfirm: str
     birthdate: datetime
 
-# 데이터베이스 세션 의존성
 def get_db():
     db = SessionLocal()
     try:
@@ -25,11 +23,9 @@ def get_db():
     finally:
         db.close()
 
-# 비밀번호 해싱 함수
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
-# 이메일 유효성 검사 함수
 def validate_email(email: str) -> bool:
     pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
     return re.match(pattern, email) is not None
@@ -44,7 +40,6 @@ async def signup(signup_info: Signup, db: Session = Depends(get_db)):
 
         hashed_password = hash_password(signup_info.password)
 
-        # 사용자 정보 생성 및 데이터베이스에 저장
         new_user = User(name=signup_info.name, email=signup_info.email, password_hash=hashed_password,
                         birthdate=signup_info.birthdate)
         db.add(new_user)
@@ -52,12 +47,8 @@ async def signup(signup_info: Signup, db: Session = Depends(get_db)):
 
         return {"message": "회원가입이 완료되었습니다."}
 
-    except HTTPException:
-        raise  # 이미 HTTPException을 발생시키면 그대로 다시 발생시킨다.
+    except HTTPException as e:
+        raise e
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"회원가입 중 오류 발생: {e}")
-
-
-
-
